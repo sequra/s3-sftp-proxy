@@ -109,9 +109,6 @@ func (s *Server) HandleClient(ctx context.Context, conn *net.TCPConn) error {
 		conn.Close()
 	}()
 
-	var userInfo *UserInfo = new(UserInfo)
-	userInfo.Addr = conn.RemoteAddr()
-
 	F(s.Log.Info, "connected from client %s", conn.RemoteAddr().String())
 
 	innerCtx, cancel := context.WithCancel(ctx)
@@ -128,7 +125,11 @@ func (s *Server) HandleClient(ctx context.Context, conn *net.TCPConn) error {
 		return err
 	}
 
-	userInfo.User = sconn.User()
+	userInfo := &UserInfo{
+		Addr: conn.RemoteAddr(),
+		User: sconn.User(),
+	}
+
 	F(s.Log.Info, "user %s logged in", sconn.User())
 	bucket, ok := s.UserToBucketMap[sconn.User()]
 	if !ok {
