@@ -194,9 +194,9 @@ func (oow *S3PutObjectWriter) Close() error {
 	if err != nil {
 		oow.Log.Debug("=> ", err)
 		F(oow.Log.Error, "failed to put object: %s", err.Error())
-	} else {
-		oow.Log.Debug("=> OK")
+		return err
 	}
+	oow.Log.Debug("=> OK")
 	return nil
 }
 
