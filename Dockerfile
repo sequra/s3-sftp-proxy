@@ -1,16 +1,12 @@
 FROM golang:alpine AS build
 
+ENV GO111MODULE=on
+
 SHELL ["/bin/sh", "-x", "-c"]
 
 COPY ./ /go/src/s3-sftp-proxy/
 
-RUN install -d /go/bin \
-    && wget https://raw.githubusercontent.com/golang/dep/master/install.sh -O /tmp/dep-install.sh \
-    && sh /tmp/dep-install.sh
-
 WORKDIR /go/src/s3-sftp-proxy/
-
-RUN dep ensure
 
 RUN go build
 
